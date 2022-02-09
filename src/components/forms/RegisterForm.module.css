@@ -1,0 +1,16 @@
+.registerForm {
+  padding: 10px 10px;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  align-items: center;
+}
+
+.field{
+  width: 100%;
+  margin: 16px 0;
+}
+.submitButton {
+  margin: 16px 0;
+  width: 100%;
+}

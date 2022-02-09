@@ -3,10 +3,24 @@ import ReactDOM from "react-dom";
 import "./index.css";
 import App from "./App";
 import reportWebVitals from "./reportWebVitals";
-
+import AdapterJalali from "@date-io/date-fns-jalali";
+import { BrowserRouter } from "react-router-dom";
+import { LocalizationProvider } from "@mui/lab";
+import RTL from "./components/RTL";
+import { RecoilRoot } from "recoil";
 ReactDOM.render(
   <React.StrictMode>
-    <App />
+    <RecoilRoot>
+      <React.Suspense fallback={<div>Loading...</div>}>
+        <BrowserRouter>
+          <LocalizationProvider dateAdapter={AdapterJalali}>
+            <RTL>
+              <App />
+            </RTL>
+          </LocalizationProvider>
+        </BrowserRouter>
+      </React.Suspense>
+    </RecoilRoot>
   </React.StrictMode>,
   document.getElementById("root")
 );
