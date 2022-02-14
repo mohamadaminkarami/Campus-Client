@@ -1,17 +1,20 @@
 import Button from "@mui/material/Button";
 import { Formik, Form } from "formik";
 import * as Yup from "yup";
-import CustomDatePicker from "../CustomDatePicker";
-import EmailField from "../EmailField";
-import PasswordField from "../PasswordField";
-import SchoolBoxField from "../SchoolBoxField";
-import StudentNumberField from "../StudentNumberField";
-import useUserActions from "../../actions/useUserActions";
-import classes from "./RegisterForm.module.css";
-import { useNavigate } from "react-router-dom";
 import { useCallback } from "react";
-import config from "../../config";
+import { useNavigate } from "react-router-dom";
+
+import CustomDatePicker from "../components/CustomDatePicker";
+import EmailField from "../components/EmailField";
+import PasswordField from "../components/PasswordField";
+import SchoolBoxField from "../components/SchoolBoxField";
+import StudentNumberField from "../components/StudentNumberField";
+import useUserActions from "../actions/useUserActions";
+import config from "../config";
+import { makeStyles } from "@mui/styles";
+
 const { ROUTE_PATHS } = config;
+
 const initialValues = {
   school: "",
   entranceYear: "",
@@ -20,25 +23,49 @@ const initialValues = {
   password: "",
 };
 
+const useStyles = makeStyles((theme) => ({
+  registerForm: {
+    display: "flex",
+    flexDirection: "column",
+    width: "100%",
+    alignItems: "center",
+    padding: "10px 10px 10px 10px",
+    border: "1px solid white",
+    height: "550px",
+  },
+}));
+
 const registerFormSchema = Yup.object().shape({
   school: Yup.object()
-    .shape({ name: Yup.string().required(), id: Yup.number().required() })
+    .typeError("دانشکده نمی‌تواند خالی باشد.")
     .required("دانشکده نمی‌تواند خالی باشد."),
-  entranceYear: Yup.string().required("سال ورودی نمی‌تواند خالی باشد."),
+  entranceYear: Yup.date()
+    .typeError("سال ورودی تنها شامل عدداست.")
+    .required("سال ورودی نمی‌تواند خالی باشد."),
   email: Yup.string()
     .email("لطفا فرمت ایمیل را به طور صحیح وارد کنید.")
     .required("ایمیل نمی‌تواند خالی باشد."),
-  studentNumber: Yup.string().required("شماره دانش‌جویی نمی‌تواند خالی باشد."),
+  studentNumber: Yup.string()
+    .matches("^[0-9]*$", "شماره دانش‌جویی تنها شامل عدد است.")
+    .required("شماره دانش‌جویی نمی‌تواند خالی باشد."),
   password: Yup.string().required("رمز عبور نمی‌تواند خالی باشد."),
 });
 
 function RegisterForm() {
+  const classes = useStyles();
   const userActions = useUserActions();
   const navigate = useNavigate();
   const handleSubmit = useCallback(
-    async (values) => {
-      console.log(values);
-      await userActions.register(values);
+    async ({ school, entranceYear, email, studentNumber, password }) => {
+      entranceYear = entranceYear.getFullYear();
+      school = school.id;
+      await userActions.register({
+        email,
+        studentNumber,
+        password,
+        school,
+        entranceYear,
+      });
       navigate(ROUTE_PATHS.HOME, { replace: true });
     },
     [userActions, navigate]
@@ -48,11 +75,11 @@ function RegisterForm() {
     <Formik
       initialValues={initialValues}
       validationSchema={registerFormSchema}
-      onSubmit={async (values) => await handleSubmit(values)}
+      onSubmit={async (values) => handleSubmit(values)}
     >
       <Form className={classes.registerForm}>
         <SchoolBoxField
-          className={classes.field}
+          style={{ margin: "5px 5px 5px 5px" }}
           id="registerSchoolBox"
           name="school"
           label="دانشکده خود را انتخاب کنید."
@@ -60,34 +87,34 @@ function RegisterForm() {
         <CustomDatePicker
           id="date"
           name="entranceYear"
-          className={classes.field}
+          style={{ margin: "5px 5px 5px 5px" }}
           label="سال ورود خود به دانشگاه را وارد کنید."
           views={["year"]}
-          disableFuture={true}
+          disableFuture
         />
         <EmailField
           name="email"
-          className={classes.field}
+          style={{ margin: "5px 5px 5px 5px" }}
           label="ایمیل خود را وارد کنید."
           id="registerEmail"
         />
         <StudentNumberField
           name="studentNumber"
-          className={classes.field}
+          style={{ margin: "5px 5px 5px 5px" }}
           id="registerStudentNumber"
           label="شماره‌ دانش‌جویی خود را وارد کنید."
         />
         <PasswordField
           name="password"
-          className={classes.field}
+          style={{ margin: "5px 5px 5px 5px" }}
           id="registerPassword"
           label="رمز عبور خود را وارد کنید."
         />
         <Button
-          className={classes.submitButton}
+          sx={{ marginTop: "10px" }}
           type="submit"
-          color="secondary"
-          variant="contained"
+          color="primary"
+          variant="outlined"
         >
           ثبت‌نام کنید.
         </Button>

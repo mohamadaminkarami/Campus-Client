@@ -3,34 +3,60 @@ import { Formik, Form } from "formik";
 import { useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 import * as Yup from "yup";
-import useUserActions from "../../actions/useUserActions";
-import EmailField from "../EmailField";
-import PasswordField from "../PasswordField";
-import StudentNumberField from "../StudentNumberField";
-import classes from "./LoginForm.module.css";
-import config from "../../config";
+import { makeStyles } from "@mui/styles";
+
+import useUserActions from "../actions/useUserActions";
+import EmailField from "../components/EmailField";
+import PasswordField from "../components/PasswordField";
+import StudentNumberField from "../components/StudentNumberField";
+import config from "../config";
+
 const { ROUTE_PATHS } = config;
+
 const initialValues = {
   email: "",
   studentNumber: "",
   password: "",
 };
 
+const useStyles = makeStyles((theme) => ({
+  loginForm: {
+    display: "flex",
+    flexDirection: "column",
+    width: "100%",
+    alignItems: "center",
+    padding: "10px 10px 10px 10px",
+    border: "1px solid white",
+    height: "550px",
+  },
+
+  formField: {
+    margin: "10px 10px 10px 10px",
+  },
+
+  formSubmitButton: {
+    width: "50%",
+    marginTop: 16,
+    padding: "16px 0",
+  },
+}));
+
 const loginFormSchema = Yup.object().shape({
   email: Yup.string()
     .email("لطفا فرمت ایمیل را به طور صحیح وارد کنید.")
     .required("ایمیل نمی‌تواند خالی باشد."),
-  studentNumber: Yup.string().required("شماره دانش‌جویی نمی‌تواند خالی باشد."),
+  studentNumber: Yup.string()
+    .matches("^[0-9]*$", "شماره دانش‌جویی تنها شامل عدد است.")
+    .required("شماره دانش‌جویی نمی‌تواند خالی باشد."),
   password: Yup.string().required("رمز عبور نمی‌تواند خالی باشد."),
 });
 
 function LoginForm() {
+  const classes = useStyles();
   const userActions = useUserActions();
   const navigate = useNavigate();
   const handleSubmit = useCallback(
     async (values) => {
-      console.log(values);
-
       await userActions.login(values);
       navigate(ROUTE_PATHS.HOME, { replace: true });
     },
@@ -40,32 +66,33 @@ function LoginForm() {
     <Formik
       initialValues={initialValues}
       validationSchema={loginFormSchema}
-      onSubmit={async (values) => await handleSubmit(values)}
+      onSubmit={async (values) => handleSubmit(values)}
     >
-      <Form className={classes.loginForm}>
+      <Form className={classes.loginForm} autoComplete="off">
         <EmailField
           name="email"
-          className={classes.field}
+          sx={{ margin: "20px" }}
           label="ایمیل خود را وارد کنید."
           id="loginEmail"
         />
         <StudentNumberField
           name="studentNumber"
-          className={classes.field}
+          sx={{ marginTop: "35px" }}
           id="loginStudentNumber"
           label="شماره‌ دانش‌جویی خود را وارد کنید."
         />
 
         <PasswordField
           name="password"
-          className={classes.field}
+          sx={{ marginTop: "50px" }}
           id="loginPassword"
           label="رمز عبور خود را وارد کنید."
         />
         <Button
-          variant="contained"
+          variant="outlined"
           type="submit"
-          className={classes.submitButton}
+          color="success"
+          sx={{ marginTop: "30px", border: 2 }}
         >
           وارد شوید
         </Button>

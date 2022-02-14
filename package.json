@@ -9,10 +9,12 @@
     "@mui/icons-material": "^5.4.1",
     "@mui/lab": "^5.0.0-alpha.68",
     "@mui/material": "^5.4.1",
+    "@mui/styles": "^5.4.1",
     "@testing-library/jest-dom": "^5.14.1",
     "@testing-library/react": "^12.0.0",
     "@testing-library/user-event": "^13.2.1",
     "axios": "^0.25.0",
+    "clsx": "^1.1.1",
     "date-fns-jalali": "^2.28.0-0",
     "formik": "^2.2.9",
     "fuse.js": "^6.5.3",
@@ -31,7 +33,9 @@
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
-    "format": "prettier --write \"src/**/*.{js,jsx,json,css}\""
+    "format": "prettier --write \"src/**/*.{js,jsx,json,css}\"",
+    "lint": "eslint --ext .jsx,.js src/",
+    "lint:fix": "eslint --ext .jsx,.js src/ --fix"
   },
   "eslintConfig": {
     "extends": [
@@ -52,6 +56,14 @@
     ]
   },
   "devDependencies": {
+    "@eslint/create-config": "^0.1.2",
+    "eslint": "^7.32.0",
+    "eslint-config-airbnb": "^19.0.4",
+    "eslint-config-prettier": "^8.3.0",
+    "eslint-plugin-import": "^2.25.4",
+    "eslint-plugin-jsx-a11y": "^6.5.1",
+    "eslint-plugin-prettier": "^4.0.0",
+    "eslint-plugin-react": "^7.28.0",
     "prettier": "^2.5.1"
   }
 }

@@ -7,11 +7,12 @@ const config = {
   },
   SERVER_API_URLS: {
     BASE_URL: getEnvVariable("SERVER_BASE_URL", "http://localhost:8000"),
-    LOGIN_PATH: getEnvVariable("SERVER_LOGIN_PATH", "/login"),
-    REGISTER_PATH: getEnvVariable("SERVER_REGISTER_PATH", "/register"),
+    LOGIN_PATH: getEnvVariable("SERVER_LOGIN_PATH", "/users/login"),
+    REGISTER_PATH: getEnvVariable("SERVER_REGISTER_PATH", "/users/register"),
     SCHOOLS: getEnvVariable("SERVER_SCHOOLS", "/schools"),
   },
   LOCAL_STORAGE_AUTH_KEY: getEnvVariable("LOCAL_STORAGE_AUTH_KEY", "userAuth"),
+  UI_THEME: getEnvVariable("UI_THEME", "dark"),
 };
 
 export default new Proxy(config, {

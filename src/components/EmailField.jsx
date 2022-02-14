@@ -1,9 +1,12 @@
 import TextField from "@mui/material/TextField";
 import { useField } from "formik";
+import ErrorMessageField from "./ErrorMessageField";
+
 /**
  *
  * @param {{name: string, label: string, id: string}} props
  */
+
 function EmailField(props) {
   const [field, meta] = useField(props);
   return (
@@ -12,12 +15,11 @@ function EmailField(props) {
         margin="normal"
         variant="standard"
         fullWidth
+        autoComplete="email"
         {...props}
         {...field}
       />
-      {meta.touched && meta.error ? (
-        <div className="error">{meta.error}</div>
-      ) : null}
+      <ErrorMessageField meta={meta} />
     </>
   );
 }

@@ -1,5 +1,6 @@
 import TextField from "@mui/material/TextField";
 import { useField } from "formik";
+import ErrorMessageField from "./ErrorMessageField";
 
 /**
  *
@@ -13,16 +14,13 @@ function PasswordField(props) {
       <TextField
         margin="normal"
         variant="standard"
-        required
         fullWidth
         type="password"
         autoComplete="current-password"
         {...field}
         {...props}
       />
-      {meta.touched && meta.error ? (
-        <div className="error">{meta.error}</div>
-      ) : null}
+      <ErrorMessageField meta={meta} />
     </>
   );
 }

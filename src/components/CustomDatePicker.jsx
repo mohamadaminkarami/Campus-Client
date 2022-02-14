@@ -1,10 +1,12 @@
 import { DatePicker } from "@mui/lab";
 import { TextField } from "@mui/material";
 import { useField } from "formik";
+import PropTypes from "prop-types";
+import ErrorMessageField from "./ErrorMessageField";
 
 /**
  *
- * @param {{id: string, name: string, label: string, views: string[], disableFuture: boolean}} props
+ * @param {{id: string, name: string, label: string, disableFuture: boolean}} props
  */
 
 function getMask(views) {
@@ -33,19 +35,16 @@ function CustomDatePicker(props) {
           fieldHelpers.setValue(value, true);
         }}
         renderInput={(params) => (
-          <TextField
-            {...params}
-            variant="standard"
-            style={{ width: "100%", color: "red" }}
-          />
+          <TextField {...params} variant="standard" fullWidth color="primary" />
         )}
       />
-
-      {meta.touched && meta.error ? (
-        <div className="error">{meta.error}</div>
-      ) : null}
+      <ErrorMessageField meta={meta} />
     </>
   );
 }
+
+CustomDatePicker.propTypes = {
+  views: PropTypes.arrayOf(PropTypes.string),
+};
 
 export default CustomDatePicker;

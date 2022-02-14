@@ -1,5 +1,6 @@
 import axios from "axios";
 import config from "../config";
+
 const {
   SERVER_API_URLS: { BASE_URL },
 } = config;

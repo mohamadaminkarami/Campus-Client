@@ -1,59 +1,51 @@
-import React from "react";
+import React, { useCallback } from "react";
 import TextField from "@mui/material/TextField";
 import Autocomplete from "@mui/material/Autocomplete";
 import { useField } from "formik";
-import Fuse from "fuse.js";
+import PropTypes from "prop-types";
+import { useRecoilValue } from "recoil";
+import schoolListState from "../states/schoolListState";
+import schoolFuseState from "../states/schoolFuseState";
+import ErrorMessageField from "./ErrorMessageField";
 
-const schools = [
-  { name: "oamp", id: 1 },
-  { name: "elec", id: 2 },
-  { name: "ssana", id: 3 },
-  { name: "kambiz", id: 4 },
-  { name: "sll", id: 5 },
-  { name: "fard", id: 6 },
-  { name: "estim", id: 7 },
-  { name: "ali", id: 8 },
-  { name: "s9", id: 9 },
-  { name: "s10", id: 10 },
-  { name: "s11", id: 11 },
-  { name: "s12", id: 12 },
-];
+function SchoolBoxField(props) {
+  const schoolsList = useRecoilValue(schoolListState);
+  const fuse = useRecoilValue(schoolFuseState);
 
-function filterOptions(fuse) {
-  return (options, { inputValue }) => {
-    return inputValue !== ""
-      ? fuse.search(inputValue).map((i) => i.item)
-      : options;
-  };
-}
-
-function SchoolBoxField({ label, ...props }) {
-  const fuse = new Fuse(schools, { keys: ["name"] });
+  const filterOptions = useCallback(
+    (options, { inputValue }) => {
+      return inputValue ? fuse.search(inputValue).map((i) => i.item) : options;
+    },
+    [fuse]
+  );
 
   const [field, meta, fieldHelpers] = useField(props);
 
   return (
     <>
       <Autocomplete
-        getOptionLabel={(option) => option.name}
+        getOptionLabel={(option) => option?.name || option}
         {...props}
         {...field}
         disablePortal
-        id="combo-box-demo"
-        options={schools}
+        id="schoolBox"
+        options={schoolsList}
         sx={{ width: "100%" }}
         onChange={(e, value) => {
           fieldHelpers.setValue(value, true);
         }}
-        filterOptions={filterOptions(fuse)}
+        filterOptions={filterOptions}
         renderInput={(params) => (
-          <TextField {...params} variant="standard" label={label} />
+          <TextField {...params} variant="standard" label={props.label} />
         )}
       />
-      {meta.touched && meta.error ? (
-        <div className="error">{meta.error}</div>
-      ) : null}
+      <ErrorMessageField meta={meta} />
     </>
   );
 }
+
+SchoolBoxField.propTypes = {
+  label: PropTypes.string,
+};
+
 export default SchoolBoxField;
