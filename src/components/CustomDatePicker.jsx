@@ -2,6 +2,7 @@ import { DatePicker } from "@mui/lab";
 import { TextField } from "@mui/material";
 import { useField } from "formik";
 import PropTypes from "prop-types";
+import { useEffect } from "react";
 import ErrorMessageField from "./ErrorMessageField";
 
 /**
@@ -25,6 +26,10 @@ function getMask(views) {
 
 function CustomDatePicker(props) {
   const [field, meta, fieldHelpers] = useField(props);
+  useEffect(() => {
+    const today = new Date();
+    fieldHelpers.setValue(today, true);
+  }, []);
   return (
     <>
       <DatePicker

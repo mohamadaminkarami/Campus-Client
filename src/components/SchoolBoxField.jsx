@@ -1,4 +1,4 @@
-import React, { useCallback } from "react";
+import React, { useCallback, useEffect } from "react";
 import TextField from "@mui/material/TextField";
 import Autocomplete from "@mui/material/Autocomplete";
 import { useField } from "formik";
@@ -11,7 +11,6 @@ import ErrorMessageField from "./ErrorMessageField";
 function SchoolBoxField(props) {
   const schoolsList = useRecoilValue(schoolListState);
   const fuse = useRecoilValue(schoolFuseState);
-
   const filterOptions = useCallback(
     (options, { inputValue }) => {
       return inputValue ? fuse.search(inputValue).map((i) => i.item) : options;
@@ -20,6 +19,10 @@ function SchoolBoxField(props) {
   );
 
   const [field, meta, fieldHelpers] = useField(props);
+
+  useEffect(() => {
+    fieldHelpers.setValue(schoolsList[0] || "", true);
+  }, [schoolsList]);
 
   return (
     <>
