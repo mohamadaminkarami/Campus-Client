@@ -25,6 +25,8 @@ select:-webkit-autofill:hover,
 select:-webkit-autofill:focus {
   -webkit-text-fill-color: rgba(229, 229, 229, 1) !important;
   transition: background-color 5000s ease-in-out 0s !important;
+  background-color: transparent !important;
+  -webkit-background-clip: text;
 }
 
 code {

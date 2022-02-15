@@ -16,7 +16,7 @@ function PasswordField(props) {
         variant="standard"
         fullWidth
         type="password"
-        autoComplete="current-password"
+        autoComplete="new-password"
         {...field}
         {...props}
       />

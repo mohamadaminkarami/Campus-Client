@@ -15,7 +15,7 @@ function StudentNumberField(props) {
         margin="normal"
         fullWidth
         variant="standard"
-        // autoComplete="studentNumber"
+        autoComplete="studentNumber"
         autoFocus
         {...props}
         {...field}
