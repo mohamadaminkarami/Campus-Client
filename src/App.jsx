@@ -1,9 +1,9 @@
-import { Navigate, Route, Routes } from "react-router-dom";
+import { Route, Routes } from "react-router-dom";
 import { makeStyles } from "@mui/styles";
-import HomePage from "./pages/HomePage";
 import LoginPage from "./pages/LoginPage";
 import RequireAuth from "./components/RequireAuth";
 import config from "./config";
+import AuthRoutes from "./components/AuthRoutes";
 
 const { ROUTE_PATHS } = config;
 
@@ -18,18 +18,15 @@ function App() {
   return (
     <div className={classes.root}>
       <Routes>
-        <Route
-          path={ROUTE_PATHS.HOME}
-          element={
-            <RequireAuth>
-              <HomePage />
-            </RequireAuth>
-          }
-        />
         <Route path={ROUTE_PATHS.LOGIN_AND_REGISTER} element={<LoginPage />} />
+
         <Route
           path="*"
-          element={<Navigate to={ROUTE_PATHS.LOGIN_AND_REGISTER} replace />}
+          element={
+            <RequireAuth>
+              <AuthRoutes />
+            </RequireAuth>
+          }
         />
       </Routes>
     </div>

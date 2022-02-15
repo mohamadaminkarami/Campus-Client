@@ -4,6 +4,8 @@ const config = {
   ROUTE_PATHS: {
     HOME: "/",
     LOGIN_AND_REGISTER: "/login",
+    PROFILE: "/profile",
+    PLANS: "/plans",
   },
   SERVER_API_URLS: {
     BASE_URL: getEnvVariable("SERVER_BASE_URL", "http://localhost:8000"),
