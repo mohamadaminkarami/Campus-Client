@@ -3,12 +3,12 @@ import config from "../config";
 import HomePage from "../pages/HomePage";
 import PlansPage from "../pages/PlansPage";
 import ProfilePage from "../pages/ProfilePage";
-import MainNavBar from "./MainNavbar";
+import MainAppbar from "./MainAppbar";
 const { ROUTE_PATHS } = config;
 function AuthRoutes() {
   return (
     <>
-      <MainNavBar />
+      <MainAppbar />
       <Routes>
         <Route path={ROUTE_PATHS.HOME} element={<HomePage />} />
         <Route path={ROUTE_PATHS.PLANS} element={<PlansPage />} />

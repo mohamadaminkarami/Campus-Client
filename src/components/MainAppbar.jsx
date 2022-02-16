@@ -25,7 +25,7 @@ const SETTINGS_OPTIONS = {
 const pages = Object.values(PAGES_OPTIONS);
 const settings = Object.values(SETTINGS_OPTIONS);
 
-const ResponsiveAppBar = () => {
+function MainAppbar() {
   const [anchorElNav, setAnchorElNav] = React.useState(null);
   const [anchorElUser, setAnchorElUser] = React.useState(null);
   const userActions = useUserActions();
@@ -66,7 +66,7 @@ const ResponsiveAppBar = () => {
 
   return (
     <AppBar position="static">
-      <Container maxWidth="xl">
+      <Container maxWidth="100%">
         <Toolbar disableGutters>
           <Typography
             variant="h6"
@@ -118,6 +118,7 @@ const ResponsiveAppBar = () => {
               ))}
             </Menu>
           </Box>
+
           <Typography
             variant="h6"
             noWrap
@@ -126,12 +127,13 @@ const ResponsiveAppBar = () => {
           >
             LOGO
           </Typography>
+
           <Box sx={{ flexGrow: 1, display: { xs: "none", md: "flex" } }}>
             {pages.map((page) => (
               <Button
                 key={page}
                 onClick={(event) => handleCloseNavMenu(event, page)}
-                sx={{ my: 2, color: "white", display: "block" }}
+                sx={{ my: 1, color: "white", display: "block" }}
               >
                 {page}
               </Button>
@@ -139,9 +141,9 @@ const ResponsiveAppBar = () => {
           </Box>
 
           <Box sx={{ flexGrow: 0 }}>
-            <Tooltip title="Open settings">
+            <Tooltip title="تنظیمات کاربری">
               <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-                <Avatar alt="Remy Sharp" src="/static/images/avatar/2.jpg" />
+                <Avatar alt="Profile" />
               </IconButton>
             </Tooltip>
             <Menu
@@ -174,5 +176,5 @@ const ResponsiveAppBar = () => {
       </Container>
     </AppBar>
   );
-};
-export default ResponsiveAppBar;
+}
+export default MainAppbar;
