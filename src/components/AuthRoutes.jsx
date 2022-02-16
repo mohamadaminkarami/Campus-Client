@@ -15,7 +15,7 @@ function AuthRoutes() {
         <Route path={ROUTE_PATHS.PROFILE} element={<ProfilePage />} />
         <Route
           path="*"
-          element={<Navigate to={ROUTE_PATHS.LOGIN_AND_REGISTER} replace />}
+          element={<Navigate to={ROUTE_PATHS.LOGIN_AND_SIGNUP} replace />}
         />
       </Routes>
     </>

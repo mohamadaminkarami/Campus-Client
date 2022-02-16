@@ -14,7 +14,7 @@ function RequireAuth({ children }) {
     children
   ) : (
     <Navigate
-      to={ROUTE_PATHS.LOGIN_AND_REGISTER}
+      to={ROUTE_PATHS.LOGIN_AND_SIGNUP}
       state={{ from: location }}
       replace
     />

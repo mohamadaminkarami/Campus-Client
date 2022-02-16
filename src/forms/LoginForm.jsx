@@ -54,13 +54,12 @@ const loginFormSchema = Yup.object().shape({
 function LoginForm() {
   const classes = useStyles();
   const userActions = useUserActions();
-  const navigate = useNavigate();
   const handleSubmit = useCallback(
-    async (values) => {
-      await userActions.login(values);
-      navigate(ROUTE_PATHS.HOME, { replace: true });
+    async ({ email, password, studentNumber }) => {
+      console.log({ loginFormData: { email, password, studentNumber } });
+      await userActions.login({ email, password, studentNumber });
     },
-    [userActions, navigate]
+    [userActions]
   );
   return (
     <Formik

@@ -86,18 +86,16 @@ function useUserActions() {
     // const response = await serverApi.get(SERVER_API_URLS.SCHOOLS_PATH);
     // return response;
     return [
-      { id: 1, name: "oamp" },
-      { id: 2, name: "elec" },
-      { id: 3, name: "ssana" },
-      { id: 4, name: "kambiz" },
-      { id: 5, name: "sll" },
-      { id: 6, name: "fard" },
-      { id: 7, name: "estim" },
-      { id: 8, name: "ali" },
-      { id: 9, name: "s9" },
-      { id: 10, name: "s10" },
-      { id: 11, name: "s11" },
-      { id: 12, name: "s12" },
+      { id: 1, name: "مهندسی کامپیوتر" },
+      { id: 2, name: "مهندسی صنایع" },
+      { id: 3, name: "مهندسی برق" },
+      { id: 4, name: "مهندسی عمران" },
+      { id: 5, name: "مرکز معارف" },
+      { id: 6, name: "مرکز تربیت بدنی" },
+      { id: 7, name: "ریاضی" },
+      { id: 8, name: "فیزیک" },
+      { id: 9, name: "کارگاه‌ها" },
+      { id: 10, name: "مهندسی و علم مواد‍" },
     ];
   }
 

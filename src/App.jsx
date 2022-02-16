@@ -18,7 +18,7 @@ function App() {
   return (
     <div className={classes.root}>
       <Routes>
-        <Route path={ROUTE_PATHS.LOGIN_AND_REGISTER} element={<LoginPage />} />
+        <Route path={ROUTE_PATHS.LOGIN_AND_SIGNUP} element={<LoginPage />} />
 
         <Route
           path="*"

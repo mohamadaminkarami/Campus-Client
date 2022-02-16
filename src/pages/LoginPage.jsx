@@ -5,7 +5,7 @@ import { Box } from "@mui/system";
 import { useCallback } from "react";
 import clsx from "clsx";
 import LoginForm from "../forms/LoginForm";
-import RegisterForm from "../forms/RegisterForm";
+import SignupForm from "../forms/SignupForm";
 import { useRecoilValue } from "recoil";
 import userAuthState from "../states/userAuthState";
 import { useNavigate } from "react-router-dom";
@@ -30,7 +30,7 @@ const useStyles = makeStyles((theme) => ({
   loginFormContaniner: {
     padding: "10px 10px 10px 5px",
   },
-  registerFormContaniner: {
+  signupFormContaniner: {
     padding: "10px 5px 10px 10px",
   },
 
@@ -52,7 +52,7 @@ const useStyles = makeStyles((theme) => ({
     },
   },
 
-  registerAnimation: {
+  signupAnimation: {
     animationDirection: "normal",
   },
   loginAnimation: {
@@ -95,7 +95,7 @@ function LoginPage() {
       return undefined;
     }
     return hasAccount === true
-      ? classes.registerAnimation
+      ? classes.signupAnimation
       : classes.loginAnimation;
   }, [hasAccount, classes]);
 
@@ -135,10 +135,10 @@ function LoginPage() {
             <Grid
               item
               xs={6}
-              className={classes.registerFormContaniner}
-              id="registerFormContainer"
+              className={classes.signupFormContaniner}
+              id="signupFormContaniner"
             >
-              <RegisterForm />
+              <SignupForm />
             </Grid>
           </Grow>
 

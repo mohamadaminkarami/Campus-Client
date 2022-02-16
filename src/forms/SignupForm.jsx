@@ -24,7 +24,7 @@ const initialValues = {
 };
 
 const useStyles = makeStyles((theme) => ({
-  registerForm: {
+  signupForm: {
     display: "flex",
     flexDirection: "column",
     width: "100%",
@@ -35,7 +35,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const registerFormSchema = Yup.object().shape({
+const signupFormSchema = Yup.object().shape({
   school: Yup.object()
     .typeError("دانشکده نمی‌تواند خالی باشد.")
     .required("دانشکده نمی‌تواند خالی باشد."),
@@ -51,20 +51,27 @@ const registerFormSchema = Yup.object().shape({
   password: Yup.string().required("رمز عبور نمی‌تواند خالی باشد."),
 });
 
-function RegisterForm() {
+function SignupForm() {
   const classes = useStyles();
   const userActions = useUserActions();
   const navigate = useNavigate();
   const handleSubmit = useCallback(
     async ({ school, entranceYear, email, studentNumber, password }) => {
-      entranceYear = entranceYear.getFullYear();
-      school = school.id;
-      await userActions.register({
+      console.log({
+        signupFormData: {
+          school,
+          entranceYear,
+          email,
+          studentNumber,
+          password,
+        },
+      });
+      await userActions.signup({
         email,
         studentNumber,
         password,
-        school,
-        entranceYear,
+        schoolId: school.id,
+        entranceYear: entranceYear.getFullYear(),
       });
       navigate(ROUTE_PATHS.HOME, { replace: true });
     },
@@ -74,13 +81,13 @@ function RegisterForm() {
   return (
     <Formik
       initialValues={initialValues}
-      validationSchema={registerFormSchema}
+      validationSchema={signupFormSchema}
       onSubmit={async (values) => handleSubmit(values)}
     >
-      <Form className={classes.registerForm}>
+      <Form className={classes.signupForm}>
         <SchoolBoxField
           style={{ margin: "5px 5px 5px 5px" }}
-          id="registerSchoolBox"
+          id="signupSchoolBox"
           name="school"
           label="دانشکده خود را انتخاب کنید."
         />
@@ -96,18 +103,18 @@ function RegisterForm() {
           name="email"
           style={{ margin: "5px 5px 5px 5px" }}
           label="ایمیل خود را وارد کنید."
-          id="registerEmail"
+          id="signupEmail"
         />
         <StudentNumberField
           name="studentNumber"
           style={{ margin: "5px 5px 5px 5px" }}
-          id="registerStudentNumber"
+          id="signupStudentNumber"
           label="شماره‌ دانش‌جویی خود را وارد کنید."
         />
         <PasswordField
           name="password"
           style={{ margin: "5px 5px 5px 5px" }}
-          id="registerPassword"
+          id="signupPassword"
           label="رمز عبور خود را وارد کنید."
         />
         <Button
@@ -123,4 +130,4 @@ function RegisterForm() {
   );
 }
 
-export default RegisterForm;
+export default SignupForm;
