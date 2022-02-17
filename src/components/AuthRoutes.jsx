@@ -10,7 +10,6 @@ function AuthRoutes() {
     <>
       <MainAppbar />
       <Routes>
-        <Route path={ROUTE_PATHS.HOME} element={<HomePage />} />
         <Route path={ROUTE_PATHS.PLANS} element={<PlansPage />} />
         <Route path={ROUTE_PATHS.PROFILE} element={<ProfilePage />} />
         <Route

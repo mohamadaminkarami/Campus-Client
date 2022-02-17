@@ -8,7 +8,7 @@ import Fuse from "fuse.js";
 import schoolListState from "../states/schoolsListState";
 import ErrorMessageField from "./ErrorMessageField";
 
-function SchoolBoxField(props) {
+function SchoolBoxField({ notSetDefaultValue, ...props }) {
   const schoolsList = useRecoilValue(schoolListState);
 
   const fuse = useMemo(() => {
@@ -26,7 +26,9 @@ function SchoolBoxField(props) {
   const [field, meta, fieldHelpers] = useField(props);
 
   useEffect(() => {
-    fieldHelpers.setValue(schoolsList[0] || "", true);
+    if (!notSetDefaultValue) {
+      fieldHelpers.setValue(schoolsList[1] || "", true);
+    }
   }, [schoolsList]);
 
   return (
@@ -54,6 +56,7 @@ function SchoolBoxField(props) {
 
 SchoolBoxField.propTypes = {
   label: PropTypes.string,
+  notSetDefaultValue: PropTypes.bool,
 };
 
 export default SchoolBoxField;

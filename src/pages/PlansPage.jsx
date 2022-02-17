@@ -23,7 +23,7 @@ function PlansPage() {
   const courseGroupsList = useRecoilValue(courseGroupsListState);
   const setIsAddPlan = useSetRecoilState(isAddPlanState);
 
-  // console.log({ pageSelection, plans });
+  console.log({ pageSelection, plans });
 
   const schoolFuse = useMemo(() => {
     console.log("plans schoolFuse called");
@@ -73,6 +73,21 @@ function PlansPage() {
       }));
     },
     [plans, setPageSelection]
+  );
+
+  const handleAddGroupCourseToPlan = useCallback(
+    async ({ planId, courseGroupId }) => {
+      const updatedPlan = await userActions.addCourseGroupToPlan({
+        planId,
+        courseGroupId,
+      });
+      setPlans((oldPlans) => [
+        ...oldPlans.map((plan) =>
+          plan.id === updatedPlan.id ? updatedPlan : plan
+        ),
+      ]);
+    },
+    [userActions, setPlans]
   );
 
   const handleAddPlan = useCallback(async () => {
@@ -216,12 +231,20 @@ function PlansPage() {
                   hoveredCourseGroup: selectedItem,
                 }));
               }}
-              onChange={async (e, value) => {
+              onChange={async (e, value, reason) => {
                 setPageSelection((oldState) => ({
                   ...oldState,
                   courseGroupId: value?.id,
-                  // hoveredCourseGroup: undefined,
+                  hoveredCourseGroup: undefined,
                 }));
+
+                console.log({ pageSelection2: pageSelection });
+                if (reason === "selectOption") {
+                  await handleAddGroupCourseToPlan({
+                    planId: pageSelection.planId,
+                    courseGroupId: value?.id,
+                  });
+                }
               }}
               ListboxProps={{ style: { maxHeight: "150px" } }}
               renderInput={(params) => (

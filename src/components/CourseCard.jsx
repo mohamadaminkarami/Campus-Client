@@ -7,8 +7,10 @@ import Typography from "@mui/material/Typography";
 import PropTypes from "prop-types";
 import DeleteIcon from "@mui/icons-material/Delete";
 import { useCallback, useState } from "react";
-import { useSetRecoilState } from "recoil";
+import { useRecoilState, useSetRecoilState } from "recoil";
 import pageSelectionState from "../states/pageSelectionState";
+import useUserActions from "../actions/useUserActions";
+import userPlansState from "../states/userPlansState";
 
 function CourseCard({
   course,
@@ -18,12 +20,15 @@ function CourseCard({
   gridCount,
   ...props
 }) {
+  console.log({ props });
   const [deleteIconDisplayState, setDeleteIconDisplayState] = useState({
     display: "none",
     zIndex: 0,
   });
 
-  const setPageSelection = useSetRecoilState(pageSelectionState);
+  const [pageSelection, setPageSelection] = useRecoilState(pageSelectionState);
+  const setPlans = useSetRecoilState(userPlansState);
+  const userActions = useUserActions();
 
   const handleMouseOver = () => {
     setDeleteIconDisplayState({ display: "block", zIndex: 1000 });
@@ -33,14 +38,24 @@ function CourseCard({
   };
 
   const getPositions = useCallback((gridCount) => {
-    console.log({ gridCount });
     return {
       width: `${gridCount * 100}%`,
       height: "93px",
     };
   }, []);
 
-  const handleDeleteButtonClick = useCallback(() => {}, []);
+  const handleDeleteButtonClick = useCallback(async () => {
+    const { planId } = pageSelection;
+    const updatedPlan = await userActions.deleteCourseGroupFromPlan({
+      planId,
+      courseGroupId: props.id,
+    });
+    setPlans((oldPlans) => [
+      ...oldPlans.map((plan) =>
+        plan.id === updatedPlan.id ? updatedPlan : plan
+      ),
+    ]);
+  }, [setPlans, userActions, pageSelection]);
   const handleDetailButtonClick = useCallback(() => {
     setPageSelection((oldPageSelection) => ({
       ...oldPageSelection,
@@ -132,6 +147,7 @@ CourseCard.propTypes = {
   groupNumber: PropTypes.number.isRequired,
   isHovered: PropTypes.bool.isRequired,
   gridCount: PropTypes.number.isRequired,
+  id: PropTypes.number.isRequired,
 };
 
 export default CourseCard;

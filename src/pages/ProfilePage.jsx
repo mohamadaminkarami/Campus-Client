@@ -1,5 +1,7 @@
+import ProfileForm from "../forms/ProfileForm";
+
 function ProfilePage() {
-  return <div>ProfilePage</div>;
+  return <ProfileForm />;
 }
 
 export default ProfilePage;
