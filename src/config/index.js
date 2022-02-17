@@ -15,7 +15,7 @@ const config = {
     SCHOOLS_PATH: getEnvVariable("SERVER_SCHOOLS_PATH", "/schools"),
     GROUP_COURSES_PATH: getEnvVariable(
       "SERVER_GROUP_COURSES_PATH",
-      "/groupCourses"
+      "/schools/course-groups"
     ),
     PLANS_PATH: getEnvVariable("SERVER_PLANS_PATH", "/plans"),
   },

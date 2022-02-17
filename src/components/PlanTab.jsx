@@ -3,10 +3,11 @@ import Tab from "@mui/material/Tab";
 import ClearIcon from "@mui/icons-material/Clear";
 import PropTypes from "prop-types";
 import { useCallback, useState } from "react";
-import { useRecoilState } from "recoil";
+import { useRecoilState, useSetRecoilState } from "recoil";
 import userPlansState from "../states/userPlansState";
 import useUserActions from "../actions/useUserActions";
-import selectedPlanTabIndexState from "../states/selectedPlanTabIndexState";
+import pageSelectionState from "../states/pageSelectionState";
+import isAddPlanState from "../states/isAddPlanState";
 
 function PlanTab({ label, planId, ...props }) {
   const [deleteIconDisplayState, setDeleteIconDisplayState] = useState({
@@ -14,19 +15,18 @@ function PlanTab({ label, planId, ...props }) {
     zIndex: 0,
   });
 
-  const [selectedPlanTabIndex, setSelectedPlanTabIndex] = useRecoilState(
-    selectedPlanTabIndexState
-  );
-
-  const [plans, setPlans] = useRecoilState(userPlansState);
-
   const userActions = useUserActions();
 
+  const [plans, setPlans] = useRecoilState(userPlansState);
+  const [pageSelection, setPageSelection] = useRecoilState(pageSelectionState);
+
+  const setIsAddPlan = useSetRecoilState(isAddPlanState);
+
   const handleMouseOver = useCallback(() => {
-    if (selectedPlanTabIndex === props.value) {
+    if (pageSelection.planTabIndex === props.value) {
       setDeleteIconDisplayState({ display: "block", zIndex: 1000 });
     }
-  }, [setDeleteIconDisplayState, selectedPlanTabIndex, props.value]);
+  }, [setDeleteIconDisplayState, pageSelection.planTabIndex, props.value]);
 
   const handleMouseOut = useCallback(() => {
     setDeleteIconDisplayState({ display: "none", zIndex: 0 });
@@ -35,17 +35,9 @@ function PlanTab({ label, planId, ...props }) {
   const handleDeletePlan = useCallback(async () => {
     const { value } = props;
     const plan = await userActions.deletePlan({ planId });
-
-    const newIndex =
-      value >= plans.length - 1
-        ? plans.length - 2 >= 0
-          ? plans.length - 2
-          : 0
-        : value;
-
-    setSelectedPlanTabIndex(newIndex);
+    setIsAddPlan(false);
     setPlans((oldPlans) => [...oldPlans].filter((p) => p.id !== planId));
-  }, [userActions.createPlan, setPlans, props.value, setSelectedPlanTabIndex]);
+  }, [userActions.deletePlan, setPlans, props.value]);
   return (
     <Tab
       onClick={(event) => {
