@@ -1,13 +1,13 @@
+import ClearIcon from "@mui/icons-material/Clear";
 import { Button } from "@mui/material";
 import Tab from "@mui/material/Tab";
-import ClearIcon from "@mui/icons-material/Clear";
 import PropTypes from "prop-types";
 import { useCallback, useState } from "react";
 import { useRecoilState, useSetRecoilState } from "recoil";
-import userPlansState from "../states/userPlansState";
 import useUserActions from "../actions/useUserActions";
-import pageSelectionState from "../states/pageSelectionState";
 import isAddPlanState from "../states/isAddPlanState";
+import pageSelectionState from "../states/pageSelectionState";
+import userPlansState from "../states/userPlansState";
 
 function PlanTab({ label, planId, ...props }) {
   const [deleteIconDisplayState, setDeleteIconDisplayState] = useState({

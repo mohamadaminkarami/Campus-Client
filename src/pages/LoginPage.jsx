@@ -1,22 +1,21 @@
 import { Button, Grid, Grow } from "@mui/material";
-import { useEffect, useState } from "react";
 import { makeStyles } from "@mui/styles";
 import { Box } from "@mui/system";
-import { useCallback } from "react";
 import clsx from "clsx";
+import { useCallback, useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { useRecoilValue } from "recoil";
+import config from "../config";
 import LoginForm from "../forms/LoginForm";
 import SignupForm from "../forms/SignupForm";
-import { useRecoilValue } from "recoil";
 import userAuthState from "../states/userAuthState";
-import { useNavigate } from "react-router-dom";
-import config from "../config";
 const { ROUTE_PATHS } = config;
 const useStyles = makeStyles((theme) => ({
   root: {
     left: "50%",
     top: "50%",
     position: "absolute",
-    transform: "translate(-50%, -60%)",
+    transform: "translate(-50%, -55%)",
     alignItems: "center",
     width: "70%",
   },
@@ -157,9 +156,12 @@ function LoginPage() {
               <br />
               <div id="detailBody">
                 {hasAccount ? (
-                  <div>اگر حساب کاربری ندارید لطفا :</div>
+                  <div>
+                    اگر تاحالا از کمپس استفاده نکردی می‌تونی با دکمه زیر حساب
+                    جدید بسازی
+                  </div>
                 ) : (
-                  <div>حساب کاربری دارید؟ لطفا:</div>
+                  <div>اگر قبلا حساب ساختی دکمه‌ زیر رو بزن :دی</div>
                 )}
               </div>
               <br />

@@ -1,11 +1,7 @@
-import { DatePicker, DateTimePicker } from "@mui/lab";
+import { DateTimePicker } from "@mui/lab";
 import { TextField } from "@mui/material";
 import { useField } from "formik";
 import PropTypes from "prop-types";
-import { useEffect } from "react";
-import { useRecoilValue } from "recoil";
-import schoolListState from "../states/schoolsListState";
-import userProfileState from "../states/userProfileState";
 import ErrorMessageField from "./ErrorMessageField";
 
 /**

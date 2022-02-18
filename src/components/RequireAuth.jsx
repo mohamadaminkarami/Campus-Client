@@ -1,7 +1,7 @@
-import config from "../config";
-import { Navigate, useLocation } from "react-router-dom";
 import PropTypes from "prop-types";
+import { Navigate, useLocation } from "react-router-dom";
 import { useRecoilValue } from "recoil";
+import config from "../config";
 import userAuthState from "../states/userAuthState";
 
 const { ROUTE_PATHS } = config;

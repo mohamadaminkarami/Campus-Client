@@ -1,10 +1,10 @@
 import { Navigate, Route, Routes } from "react-router-dom";
 import config from "../config";
-import HomePage from "../pages/HomePage";
 import PlansPage from "../pages/PlansPage";
 import ProfilePage from "../pages/ProfilePage";
 import MainAppbar from "./MainAppbar";
 const { ROUTE_PATHS } = config;
+
 function AuthRoutes() {
   return (
     <>

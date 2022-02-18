@@ -1,10 +1,10 @@
-import React, { useCallback, useEffect, useMemo } from "react";
-import TextField from "@mui/material/TextField";
 import Autocomplete from "@mui/material/Autocomplete";
+import TextField from "@mui/material/TextField";
 import { useField } from "formik";
-import PropTypes from "prop-types";
-import { useRecoilValue } from "recoil";
 import Fuse from "fuse.js";
+import PropTypes from "prop-types";
+import React, { useCallback, useEffect, useMemo } from "react";
+import { useRecoilValue } from "recoil";
 import schoolListState from "../states/schoolsListState";
 import ErrorMessageField from "./ErrorMessageField";
 
@@ -12,7 +12,6 @@ function SchoolBoxField({ notSetDefaultValue, ...props }) {
   const schoolsList = useRecoilValue(schoolListState);
 
   const fuse = useMemo(() => {
-    console.log("SchoolBoxField fuse called");
     return new Fuse(schoolsList, { keys: ["name"] });
   }, [schoolsList]);
 
@@ -39,6 +38,7 @@ function SchoolBoxField({ notSetDefaultValue, ...props }) {
         {...field}
         disablePortal
         id="schoolBox"
+        noOptionsText="دانشکده‌ای با این نام وجود نداره :("
         options={schoolsList}
         sx={{ width: "100%" }}
         onChange={(e, value) => {

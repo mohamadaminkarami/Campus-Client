@@ -1,15 +1,15 @@
+import DeleteIcon from "@mui/icons-material/Delete";
 import Box from "@mui/material/Box";
+import Button from "@mui/material/Button";
 import Card from "@mui/material/Card";
 import CardActions from "@mui/material/CardActions";
 import CardContent from "@mui/material/CardContent";
-import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
 import PropTypes from "prop-types";
-import DeleteIcon from "@mui/icons-material/Delete";
 import { useCallback, useState } from "react";
 import { useRecoilState, useSetRecoilState } from "recoil";
-import pageSelectionState from "../states/pageSelectionState";
 import useUserActions from "../actions/useUserActions";
+import pageSelectionState from "../states/pageSelectionState";
 import userPlansState from "../states/userPlansState";
 
 function CourseCard({
@@ -20,7 +20,6 @@ function CourseCard({
   gridCount,
   ...props
 }) {
-  console.log({ props });
   const [deleteIconDisplayState, setDeleteIconDisplayState] = useState({
     display: "none",
     zIndex: 0,

@@ -1,11 +1,11 @@
 import { Grid } from "@mui/material";
 import { Box } from "@mui/system";
+import PropTypes from "prop-types";
 import { useCallback } from "react";
 import { useRecoilValue } from "recoil";
-import PropTypes from "prop-types";
-
 import courseGroupsListState from "../states/courseGroupsListState";
 import CourseCard from "./CourseCard";
+
 const DAYS_MAPPING = {
   0: "شنبه",
   1: "یک‌شنبه",

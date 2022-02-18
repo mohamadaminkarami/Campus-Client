@@ -1,24 +1,17 @@
 import Button from "@mui/material/Button";
-import { Formik, Form } from "formik";
+import { makeStyles } from "@mui/styles";
+import { Form, Formik } from "formik";
+import { useCallback } from "react";
+import { useRecoilState, useSetRecoilState } from "recoil";
 import * as Yup from "yup";
-import { useCallback, useEffect, useMemo } from "react";
-import { useNavigate } from "react-router-dom";
-import getTimeStampFromDate from "../utils/getTimestampFromDate";
+import useUserActions from "../actions/useUserActions";
 import CustomDatePicker from "../components/CustomDatePicker";
+import CustomDateTimePicker from "../components/CustomDateTimePicker";
 import EmailField from "../components/EmailField";
-import PasswordField from "../components/PasswordField";
 import SchoolBoxField from "../components/SchoolBoxField";
 import StudentNumberField from "../components/StudentNumberField";
-import useUserActions from "../actions/useUserActions";
-import config from "../config";
-import { makeStyles } from "@mui/styles";
-import { useRecoilState, useRecoilValue } from "recoil";
+import profilePageAlertState from "../states/profilePageAlertStage";
 import userProfileState from "../states/userProfileState";
-import { DateTimePicker } from "@mui/lab";
-import CustomDateTimePicker from "../components/CustomDateTimePicker";
-import schoolListState from "../states/schoolsListState";
-
-const { ROUTE_PATHS } = config;
 
 const useStyles = makeStyles((theme) => ({
   signupForm: {
@@ -53,30 +46,36 @@ const profileFormSchema = Yup.object().shape({
 function ProfileForm() {
   const classes = useStyles();
   const userActions = useUserActions();
-  const navigate = useNavigate();
   const [userProfile, setUserProfile] = useRecoilState(userProfileState);
+
+  const setAlertState = useSetRecoilState(profilePageAlertState);
 
   const handleSubmit = useCallback(
     async ({ school, entranceYear, email, studentNumber, takeCoursesTime }) => {
       entranceYear = entranceYear.getFullYear();
       takeCoursesTime = parseInt(takeCoursesTime / 1000, 10);
-      console.log({
-        school,
-        entranceYear,
-        email,
-        studentNumber,
-        takeCoursesTime,
-      });
-      await userActions.updateProfileInfo({
+
+      const { alertState, data } = await userActions.updateProfileInfo({
         email,
         schoolId: school.id,
         takeCoursesTime,
         entranceYear,
         studentNumber,
       });
-      navigate(ROUTE_PATHS.PROFILE, { replace: true });
+
+      const schoolList = await userActions.getSchoolsList();
+
+      setAlertState(alertState);
+      setUserProfile({
+        ...data,
+        takeCoursesTime: data.takeCoursesTime
+          ? data.takeCoursesTime * 1000
+          : Date.now(),
+        school: schoolList.find((s) => s.id === data.schoolId),
+        entranceYear: new Date(data.entranceYear, 6, 1),
+      });
     },
-    [userActions, navigate]
+    [userActions]
   );
 
   return (
@@ -84,6 +83,7 @@ function ProfileForm() {
       initialValues={userProfile}
       validationSchema={profileFormSchema}
       onSubmit={async (values) => handleSubmit(values)}
+      enableReinitialize
     >
       <Form className={classes.signupForm}>
         <SchoolBoxField

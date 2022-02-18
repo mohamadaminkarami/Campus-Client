@@ -1,32 +1,35 @@
-import { Autocomplete, Button, Grid, TextField } from "@mui/material";
-import SwipeableViews from "react-swipeable-views";
-import Fuse from "fuse.js";
-import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
-import { useCallback, useMemo, useState } from "react";
-import userPlansState from "../states/userPlansState";
-import Plan from "../components/Plan";
-import { TabContext, TabList, TabPanel } from "@mui/lab";
 import { useTheme } from "@emotion/react";
-import courseGroupsListState from "../states/courseGroupsListState";
 import AddIcon from "@mui/icons-material/Add";
+import { TabContext, TabList, TabPanel } from "@mui/lab";
+import { Autocomplete, Button, Grid, TextField } from "@mui/material";
+import Fuse from "fuse.js";
+import { useCallback, useEffect, useMemo } from "react";
+import SwipeableViews from "react-swipeable-views";
+import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
 import useUserActions from "../actions/useUserActions";
 import CourseDetailCard from "../components/CourseDetailCard";
+import Plan from "../components/Plan";
 import PlanTab from "../components/PlanTab";
-import pageSelectionState from "../states/pageSelectionState";
+import courseGroupsListState from "../states/courseGroupsListState";
 import isAddPlanState from "../states/isAddPlanState";
+import pageSelectionState from "../states/pageSelectionState";
+import userPlansState from "../states/userPlansState";
 
 function PlansPage() {
   const userActions = useUserActions();
 
   const [plans, setPlans] = useRecoilState(userPlansState);
+
+  useEffect(async () => {
+    const plans = await userActions.getPlans();
+    setPlans(plans);
+  }, []);
+
   const [pageSelection, setPageSelection] = useRecoilState(pageSelectionState);
   const courseGroupsList = useRecoilValue(courseGroupsListState);
   const setIsAddPlan = useSetRecoilState(isAddPlanState);
 
-  console.log({ pageSelection, plans });
-
   const schoolFuse = useMemo(() => {
-    console.log("plans schoolFuse called");
     return new Fuse(courseGroupsList, { keys: ["schoolName"] });
   }, [courseGroupsList]);
 
@@ -38,7 +41,6 @@ function PlansPage() {
   );
 
   const courseGroupsFuse = useMemo(() => {
-    console.log("Plans courseGroupsFuse called");
     return new Fuse(getCourseGroupsListBySchoolId(pageSelection.schoolId), {
       keys: ["course.name"],
     });
@@ -91,12 +93,9 @@ function PlansPage() {
   );
 
   const handleAddPlan = useCallback(async () => {
-    console.log("handleAddPlan called");
     setIsAddPlan(true);
-    console.log("setIsAddPlan");
     const plan = await userActions.createPlan();
     setPlans((oldPlans) => [...oldPlans, plan]);
-    console.log("setPlans");
   }, [userActions.createPlan, setPlans, plans]);
 
   const getCourseDetailCardProps = useCallback(() => {
@@ -238,7 +237,6 @@ function PlansPage() {
                   hoveredCourseGroup: undefined,
                 }));
 
-                console.log({ pageSelection2: pageSelection });
                 if (reason === "selectOption") {
                   await handleAddGroupCourseToPlan({
                     planId: pageSelection.planId,
@@ -261,7 +259,7 @@ function PlansPage() {
             />
 
             {pageSelection.hoveredCourseGroup ? (
-              <div style={{ position: "absolute", bottom: 0 }}>
+              <div style={{ position: "absolute", bottom: 0, width: "95%" }}>
                 <CourseDetailCard {...getCourseDetailCardProps()} />
               </div>
             ) : (

@@ -1,17 +1,12 @@
 import Button from "@mui/material/Button";
-import { Formik, Form } from "formik";
-import { useCallback } from "react";
-import { useNavigate } from "react-router-dom";
-import * as Yup from "yup";
 import { makeStyles } from "@mui/styles";
-
+import { Form, Formik } from "formik";
+import { useCallback } from "react";
+import * as Yup from "yup";
 import useUserActions from "../actions/useUserActions";
 import EmailField from "../components/EmailField";
 import PasswordField from "../components/PasswordField";
 import StudentNumberField from "../components/StudentNumberField";
-import config from "../config";
-
-const { ROUTE_PATHS } = config;
 
 const initialValues = {
   email: "",
@@ -43,14 +38,17 @@ const useStyles = makeStyles((theme) => ({
 
 const loginFormSchema = Yup.object().shape({
   email: Yup.string()
-    .email("لطفا فرمت ایمیل را به طور صحیح وارد کنید.")
-    .required("ایمیل نمی‌تواند خالی باشد."),
+    .email("فرمت ایمیلت درست نیست دوست عزیز :(")
+    .required("ایمیلت رو نیاز داریم آخه :)"),
   studentNumber: Yup.string()
-    .matches("^[0-9]*$", "شماره دانش‌جویی تنها شامل عدد است.")
-    .min(8, "حداقل طول شماره دانش‌جویی ۸ رقم است.")
-    .max(9, "حداکثر طول شماره دانش‌جویی ۹ رقم است")
-    .required("شماره دانش‌جویی نمی‌تواند خالی باشد."),
-  password: Yup.string().required("رمز عبور نمی‌تواند خالی باشد."),
+    .matches("^[0-9]*$", "شماره دانشجویی مگه فقط عدد نیست ؟؟؟؟")
+    .min(8, "روت می‌شه با این شماره دانشجویی کوچولو بیای تو؟؟؟")
+    .max(
+      9,
+      "به به چه شماره دانشجویی بلندی ولی حیف که فقط تا ۹ رقم می‌تانیم هندل کنیم :)"
+    )
+    .required("بدون شماره دانشجویی نمیشه که :(("),
+  password: Yup.string().required("بدون رمز عبور نمیشه که :(("),
 });
 
 function LoginForm() {
@@ -58,7 +56,6 @@ function LoginForm() {
   const userActions = useUserActions();
   const handleSubmit = useCallback(
     async ({ email, password, studentNumber }) => {
-      console.log({ loginFormData: { email, password, studentNumber } });
       await userActions.login({ email, password, studentNumber });
     },
     [userActions]

@@ -1,17 +1,16 @@
 import Button from "@mui/material/Button";
-import { Formik, Form } from "formik";
-import * as Yup from "yup";
+import { makeStyles } from "@mui/styles";
+import { Form, Formik } from "formik";
 import { useCallback } from "react";
 import { useNavigate } from "react-router-dom";
-
+import * as Yup from "yup";
+import useUserActions from "../actions/useUserActions";
 import CustomDatePicker from "../components/CustomDatePicker";
 import EmailField from "../components/EmailField";
 import PasswordField from "../components/PasswordField";
 import SchoolBoxField from "../components/SchoolBoxField";
 import StudentNumberField from "../components/StudentNumberField";
-import useUserActions from "../actions/useUserActions";
 import config from "../config";
-import { makeStyles } from "@mui/styles";
 
 const { ROUTE_PATHS } = config;
 
@@ -36,21 +35,22 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const signupFormSchema = Yup.object().shape({
-  school: Yup.object()
-    .typeError("دانشکده نمی‌تواند خالی باشد.")
-    .required("دانشکده نمی‌تواند خالی باشد."),
+  school: Yup.object().typeError("نمیخوای بگی؟؟؟").required("نمیخوای بگی؟؟؟"),
   entranceYear: Yup.date()
-    .typeError("سال ورودی تنها شامل عدداست.")
-    .required("سال ورودی نمی‌تواند خالی باشد."),
+    .typeError("لطفا عدد :(((")
+    .required("یه سال ورود به کمپس نرسه؟؟"),
   email: Yup.string()
-    .email("لطفا فرمت ایمیل را به طور صحیح وارد کنید.")
-    .required("ایمیل نمی‌تواند خالی باشد."),
+    .email("فرمت ایمیلت درست نیست دوست عزیز :(")
+    .required("ایمیلت رو نیاز داریم آخه :)"),
   studentNumber: Yup.string()
-    .matches("^[0-9]*$", "شماره دانش‌جویی تنها شامل عدد است.")
-    .min(8, "حداقل طول شماره دانش‌جویی ۸ رقم است.")
-    .max(9, "حداکثر طول شماره دانش‌جویی ۹ رقم است")
-    .required("شماره دانش‌جویی نمی‌تواند خالی باشد."),
-  password: Yup.string().required("رمز عبور نمی‌تواند خالی باشد."),
+    .matches("^[0-9]*$", "شماره دانشجویی مگه فقط عدد نیست ؟؟؟؟")
+    .min(8, "روت می‌شه با این شماره دانشجویی کوچولو بیای تو؟؟؟")
+    .max(
+      9,
+      "به به چه شماره دانشجویی بلندی ولی حیف که فقط تا ۹ رقم می‌تانیم هندل کنیم :)"
+    )
+    .required("بدون شماره دانشجویی نمیشه که :(("),
+  password: Yup.string().required("بدون رمز عبور نمیشه که :(("),
 });
 
 function SignupForm() {
@@ -59,15 +59,6 @@ function SignupForm() {
   const navigate = useNavigate();
   const handleSubmit = useCallback(
     async ({ school, entranceYear, email, studentNumber, password }) => {
-      console.log({
-        signupFormData: {
-          school,
-          entranceYear,
-          email,
-          studentNumber,
-          password,
-        },
-      });
       await userActions.signup({
         email,
         studentNumber,
@@ -77,6 +68,7 @@ function SignupForm() {
       });
       navigate(ROUTE_PATHS.HOME, { replace: true });
     },
+
     [userActions, navigate]
   );
 
