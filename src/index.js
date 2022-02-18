@@ -1,20 +1,13 @@
+import AdapterJalali from "@date-io/date-fns-jalali";
+import { LocalizationProvider } from "@mui/lab";
 import React from "react";
 import ReactDOM from "react-dom";
-import AdapterJalali from "@date-io/date-fns-jalali";
 import { BrowserRouter } from "react-router-dom";
-import { LocalizationProvider } from "@mui/lab";
 import { RecoilRoot } from "recoil";
-import { ThemeProvider } from "@emotion/react";
 import App from "./App";
-import CssBaseline from "@mui/material/CssBaseline";
-import reportWebVitals from "./reportWebVitals";
 import RTL from "./components/RTL";
-import lightTheme from "./ui/themes/lightTheme";
-import darkTheme from "./ui/themes/darkTheme";
 import "./index.css";
-import config from "./config";
-
-const { UI_THEME } = config;
+import reportWebVitals from "./reportWebVitals";
 
 ReactDOM.render(
   <React.StrictMode>
@@ -23,13 +16,7 @@ ReactDOM.render(
         <BrowserRouter>
           <LocalizationProvider dateAdapter={AdapterJalali}>
             <RTL>
-              <ThemeProvider
-                theme={UI_THEME === "dark" ? darkTheme : lightTheme}
-              >
-                <CssBaseline>
-                  <App />
-                </CssBaseline>
-              </ThemeProvider>
+              <App />
             </RTL>
           </LocalizationProvider>
         </BrowserRouter>
