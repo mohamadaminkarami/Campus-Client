@@ -26,13 +26,18 @@ function useUserActions() {
     createPlan,
   };
 
-  function _handleError(error) {
+  function _getErrorAlertState(error) {
     const { response } = error;
     const message = response?.data?.error || error.message;
-    console.log({ error: { message, response } });
-    if (message === "Network Error") {
-      return { status: undefined, message: ERROR_MESSAGES[message] };
-    }
+
+    return {
+      alertState: {
+        open: true,
+        message: ERROR_MESSAGES[message] || message,
+        severity: "error",
+      },
+      error: true,
+    };
   }
 
   function _setUserAuthToken(token) {
@@ -56,9 +61,6 @@ function useUserActions() {
     studentNumber,
     password,
   }) {
-    console.log({
-      signup: { schoolId, email, entranceYear, studentNumber, password },
-    });
     try {
       const response = await serverApi.post(SERVER_API_URLS.SIGNUP_PATH, {
         schoolId,
@@ -67,20 +69,15 @@ function useUserActions() {
         studentNumber,
         password,
       });
-
       const { token } = response.data;
       _setUserAuthToken(token);
-
-      navigate(ROUTE_PATHS.HOME, { replace: true });
+      return {};
     } catch (e) {
-      _handleError(e);
+      return { ..._getErrorAlertState(e) };
     }
-    return "response";
   }
 
-  async function login({ email, studentNumber, password }) {
-    console.log({ login: { email, studentNumber, password } });
-
+  async function login({ studentNumber, password }) {
     try {
       const response = await serverApi.post(SERVER_API_URLS.LOGIN_PATH, {
         studentNumber,
@@ -88,57 +85,50 @@ function useUserActions() {
       });
       const { token } = response.data;
       _setUserAuthToken(token);
-      navigate(ROUTE_PATHS.HOME, { replace: true });
-      return "response";
+      return {};
     } catch (e) {
-      _handleError(e);
+      return { ..._getErrorAlertState(e) };
     }
   }
 
   function logout() {
-    console.log("logout called");
-
     _removeUserAuthToken();
     navigate(ROUTE_PATHS.LOGIN_AND_SIGNUP, { replace: true });
   }
 
   async function getSchoolsList() {
-    console.log("getSchoolsList called");
     try {
       const response = await serverApi.get(SERVER_API_URLS.SCHOOLS_PATH);
-      return response?.data?.result || [];
+      return { data: response?.data?.result || [] };
     } catch (e) {
-      _handleError(e);
-      return [];
+      return { ..._getErrorAlertState(e), data: [] };
     }
   }
 
   async function getCourseGroupsList() {
-    console.log("getCourseGroupsList called");
     try {
       const response = await serverApi.get(SERVER_API_URLS.GROUP_COURSES_PATH, {
         headers: _getAuthHeader(),
       });
       return response.data.result || [];
     } catch (e) {
-      _handleError(e);
-
+      _getErrorAlertState(e);
       return [];
     }
   }
 
   async function getProfileInfo() {
-    console.log("getProfileInfo called");
     try {
       const response = await serverApi.get(SERVER_API_URLS.PROFILE_PATH, {
         headers: _getAuthHeader(),
       });
 
-      return response.data;
+      return { data: response.data };
     } catch (e) {
-      _handleError(e);
-
-      return {};
+      return {
+        ..._getErrorAlertState(e),
+        data: {},
+      };
     }
   }
 
@@ -149,15 +139,6 @@ function useUserActions() {
     schoolId,
     takeCoursesTime,
   }) {
-    console.log({
-      updateProfileInfo: {
-        studentNumber,
-        email,
-        entranceYear,
-        schoolId,
-        takeCoursesTime,
-      },
-    });
     try {
       const response = await serverApi.put(
         SERVER_API_URLS.PROFILE_PATH,
@@ -179,30 +160,25 @@ function useUserActions() {
         data: response.data,
       };
     } catch (e) {
-      _handleError(e);
-
-      return {};
+      return {
+        ..._getErrorAlertState(e),
+        data: {},
+      };
     }
   }
 
   async function getPlans() {
-    console.log("getPlans called");
     try {
       const response = await serverApi.get(SERVER_API_URLS.PLANS_PATH + "/", {
         headers: _getAuthHeader(),
       });
-
-      return response.data.result || [];
+      return { data: response.data.result || [] };
     } catch (e) {
-      _handleError(e);
-
-      return [];
+      return { ..._getErrorAlertState(e), data: [] };
     }
   }
 
   async function addCourseGroupToPlan({ planId, courseGroupId }) {
-    console.log({ addCourseGroupToPlan: { planId, courseGroupId } });
-
     try {
       const response = await serverApi.post(
         `${SERVER_API_URLS.PLANS_PATH}/${planId}/${courseGroupId}`,
@@ -211,15 +187,13 @@ function useUserActions() {
       );
       return response.data;
     } catch (e) {
-      _handleError(e);
+      _getErrorAlertState(e);
 
       return {};
     }
   }
 
   async function deleteCourseGroupFromPlan({ planId, courseGroupId }) {
-    console.log({ deletePlan: { planId, courseGroupId } });
-
     try {
       const response = await serverApi.delete(
         `${SERVER_API_URLS.PLANS_PATH}/${planId}/${courseGroupId}`,
@@ -228,15 +202,13 @@ function useUserActions() {
 
       return response.data;
     } catch (e) {
-      _handleError(e);
+      _getErrorAlertState(e);
 
       return {};
     }
   }
 
   async function deletePlan({ planId }) {
-    console.log({ deletePlan: { planId } });
-
     try {
       const response = await serverApi.delete(
         SERVER_API_URLS.PLANS_PATH + "/" + planId,
@@ -245,23 +217,23 @@ function useUserActions() {
 
       return response.data;
     } catch (e) {
-      _handleError(e);
+      _getErrorAlertState(e);
     }
   }
 
   async function createPlan() {
-    console.log("createPlan called");
-
     try {
       const response = await serverApi.post(
         SERVER_API_URLS.PLANS_PATH + "/",
         {},
         { headers: _getAuthHeader() }
       );
-      console.log({ data: response.data });
-      return response.data;
+      return { data: response.data };
     } catch (e) {
-      _handleError(e);
+      return {
+        ..._getErrorAlertState(e),
+        data: {},
+      };
     }
   }
 }

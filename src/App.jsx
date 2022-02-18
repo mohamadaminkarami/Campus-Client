@@ -1,5 +1,7 @@
 import { ThemeProvider } from "@emotion/react";
+import { CircularProgress } from "@mui/material";
 import CssBaseline from "@mui/material/CssBaseline";
+import useMediaQuery from "@mui/material/useMediaQuery";
 import { makeStyles } from "@mui/styles";
 import React from "react";
 import { Route, Routes } from "react-router-dom";
@@ -12,7 +14,6 @@ import LoginPage from "./pages/LoginPage";
 import darkModeState from "./states/darkModeState";
 import darkTheme from "./ui/themes/darkTheme";
 import lightTheme from "./ui/themes/lightTheme";
-import useMediaQuery from "@mui/material/useMediaQuery";
 
 const { ROUTE_PATHS } = config;
 
@@ -35,23 +36,36 @@ function App() {
   return (
     <ThemeProvider theme={isDark ? darkTheme : lightTheme} x={theme}>
       <CssBaseline>
-        <div className={classes.root}>
-          <Routes>
-            <Route
-              path={ROUTE_PATHS.LOGIN_AND_SIGNUP}
-              element={<LoginPage />}
+        <React.Suspense
+          fallback={
+            <CircularProgress
+              style={{
+                left: "50%",
+                top: "50%",
+                position: "absolute",
+                transform: "translate(-50%, -50%)",
+              }}
             />
+          }
+        >
+          <div className={classes.root}>
+            <Routes>
+              <Route
+                path={ROUTE_PATHS.LOGIN_AND_SIGNUP}
+                element={<LoginPage />}
+              />
 
-            <Route
-              path="*"
-              element={
-                <RequireAuth>
-                  <AuthRoutes />
-                </RequireAuth>
-              }
-            />
-          </Routes>
-        </div>
+              <Route
+                path="*"
+                element={
+                  <RequireAuth>
+                    <AuthRoutes />
+                  </RequireAuth>
+                }
+              />
+            </Routes>
+          </div>
+        </React.Suspense>
       </CssBaseline>
     </ThemeProvider>
   );

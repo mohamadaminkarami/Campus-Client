@@ -54,6 +54,13 @@ function CourseCard({
         plan.id === updatedPlan.id ? updatedPlan : plan
       ),
     ]);
+    setPageSelection((oldState) => ({
+      ...oldState,
+      hoveredCourseGroup:
+        props.id === oldState.hoveredCourseGroup.id
+          ? undefined
+          : oldState.hoveredCourseGroup,
+    }));
   }, [setPlans, userActions, pageSelection]);
   const handleDetailButtonClick = useCallback(() => {
     setPageSelection((oldPageSelection) => ({

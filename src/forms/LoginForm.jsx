@@ -2,19 +2,24 @@ import Button from "@mui/material/Button";
 import { makeStyles } from "@mui/styles";
 import { Form, Formik } from "formik";
 import { useCallback } from "react";
+import { useNavigate } from "react-router-dom";
+import { useSetRecoilState } from "recoil";
 import * as Yup from "yup";
 import useUserActions from "../actions/useUserActions";
 import EmailField from "../components/EmailField";
 import PasswordField from "../components/PasswordField";
 import StudentNumberField from "../components/StudentNumberField";
 
+import config from "../config";
+import loginPageAlertState from "../states/loginPageAlertState";
+const { ROUTE_PATHS } = config;
 const initialValues = {
   email: "",
   studentNumber: "",
   password: "",
 };
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles(() => ({
   loginForm: {
     display: "flex",
     flexDirection: "column",
@@ -54,9 +59,23 @@ const loginFormSchema = Yup.object().shape({
 function LoginForm() {
   const classes = useStyles();
   const userActions = useUserActions();
+
+  const setLoginPageAlertState = useSetRecoilState(loginPageAlertState);
+  const navigate = useNavigate();
+
   const handleSubmit = useCallback(
     async ({ email, password, studentNumber }) => {
-      await userActions.login({ email, password, studentNumber });
+      const response = await userActions.login({
+        email,
+        password,
+        studentNumber,
+      });
+
+      if (response?.error) {
+        setLoginPageAlertState(response.alertState);
+      } else {
+        navigate(ROUTE_PATHS.HOME, { replace: true });
+      }
     },
     [userActions]
   );

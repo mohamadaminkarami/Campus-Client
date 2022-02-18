@@ -10,10 +10,10 @@ import CustomDateTimePicker from "../components/CustomDateTimePicker";
 import EmailField from "../components/EmailField";
 import SchoolBoxField from "../components/SchoolBoxField";
 import StudentNumberField from "../components/StudentNumberField";
-import profilePageAlertState from "../states/profilePageAlertStage";
+import profilePageAlertState from "../states/profilePageAlertState";
 import userProfileState from "../states/userProfileState";
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles(() => ({
   signupForm: {
     display: "flex",
     flexDirection: "column",
@@ -55,25 +55,32 @@ function ProfileForm() {
       entranceYear = entranceYear.getFullYear();
       takeCoursesTime = parseInt(takeCoursesTime / 1000, 10);
 
-      const { alertState, data } = await userActions.updateProfileInfo({
+      const { alertState, data, error } = await userActions.updateProfileInfo({
         email,
         schoolId: school.id,
         takeCoursesTime,
         entranceYear,
         studentNumber,
       });
-
-      const schoolList = await userActions.getSchoolsList();
-
       setAlertState(alertState);
-      setUserProfile({
-        ...data,
-        takeCoursesTime: data.takeCoursesTime
-          ? data.takeCoursesTime * 1000
-          : Date.now(),
-        school: schoolList.find((s) => s.id === data.schoolId),
-        entranceYear: new Date(data.entranceYear, 6, 1),
-      });
+      if (error) {
+        return;
+      }
+      const { data: schoolList, ...schoolListResponse } =
+        await userActions.getSchoolsList();
+
+      if (schoolListResponse?.error) {
+        setAlertState(schoolListResponse.alertState);
+      } else {
+        setUserProfile({
+          ...data,
+          takeCoursesTime: data.takeCoursesTime
+            ? data.takeCoursesTime * 1000
+            : Date.now(),
+          school: schoolList.find((s) => s.id === data.schoolId),
+          entranceYear: new Date(data.entranceYear, 6, 1),
+        });
+      }
     },
     [userActions]
   );

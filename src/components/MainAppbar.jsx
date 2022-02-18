@@ -12,11 +12,11 @@ import Tooltip from "@mui/material/Tooltip";
 import Typography from "@mui/material/Typography";
 import * as React from "react";
 import { useNavigate } from "react-router-dom";
+import { useRecoilState } from "recoil";
 import useUserActions from "../actions/useUserActions";
 import config from "../config";
-import { MaterialUISwitch } from "./MaterialUISwitch";
 import darkModeState from "../states/darkModeState";
-import { useRecoilState } from "recoil";
+import { ThemeModeSwitch } from "./ThemeModeSwitch";
 
 const { ROUTE_PATHS } = config;
 
@@ -49,8 +49,6 @@ function MainAppbar() {
         navigate(ROUTE_PATHS.PLANS);
         break;
       default:
-        console.log("unknown page option: ", page);
-        break;
     }
     setAnchorElNav(null);
   };
@@ -64,7 +62,6 @@ function MainAppbar() {
         userActions.logout();
         break;
       default:
-        console.log("unknown setting option: ", setting);
     }
     setAnchorElUser(null);
   };
@@ -145,7 +142,7 @@ function MainAppbar() {
             ))}
           </Box>
           <Box sx={{ flexGrow: 0 }}>
-            <MaterialUISwitch
+            <ThemeModeSwitch
               checked={darkMode}
               onChange={() => {
                 setDarkModeState(!darkMode);

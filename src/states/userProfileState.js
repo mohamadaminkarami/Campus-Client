@@ -8,7 +8,7 @@ const userProfileState = atom({
     get: async () => {
       const userActions = useUserActions();
       const result = await userActions.getProfileInfo();
-      const schoolList = await userActions.getSchoolsList();
+      const schoolList = (await userActions.getSchoolsList()).data;
 
       return {
         ...result,
