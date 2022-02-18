@@ -10,7 +10,7 @@ const config = {
   SERVER_API_URLS: {
     BASE_URL: getEnvVariable(
       "REACT_APP_SERVER_BASE_URL",
-      "http://localhost:8080"
+      "http://localhost:8000/server"
     ),
     LOGIN_PATH: getEnvVariable("REACT_APP_SERVER_LOGIN_PATH", "/auth/login"),
     SIGNUP_PATH: getEnvVariable("REACT_APP_SERVER_SIGNUP_PATH", "/auth/signup"),
