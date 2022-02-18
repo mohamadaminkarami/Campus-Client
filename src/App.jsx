@@ -14,7 +14,6 @@ import darkTheme from "./ui/themes/darkTheme";
 import lightTheme from "./ui/themes/lightTheme";
 import useMediaQuery from "@mui/material/useMediaQuery";
 
-const { UI_THEME } = config;
 const { ROUTE_PATHS } = config;
 
 const useStyles = makeStyles(() => ({
@@ -33,7 +32,6 @@ function App() {
     [prefersDarkMode]
   );
 
-  console.log("Mode:", isDark, "prefred:", prefersDarkMode);
   return (
     <ThemeProvider theme={isDark ? darkTheme : lightTheme} x={theme}>
       <CssBaseline>
