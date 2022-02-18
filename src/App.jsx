@@ -24,8 +24,7 @@ const useStyles = makeStyles(() => ({
 }));
 
 function App() {
-  const prefersDarkMode =
-    useMediaQuery("(prefers-color-scheme: dark)");
+  const prefersDarkMode = useMediaQuery("(prefers-color-scheme: dark)");
   const classes = useStyles();
   const [isDark, setDarkModeState] = useRecoilState(darkModeState);
 
