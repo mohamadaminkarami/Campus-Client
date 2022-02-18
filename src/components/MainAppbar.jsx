@@ -14,6 +14,10 @@ import * as React from "react";
 import { useNavigate } from "react-router-dom";
 import useUserActions from "../actions/useUserActions";
 import config from "../config";
+import { MaterialUISwitch } from "./MaterialUISwitch";
+import darkModeState from "../states/darkModeState";
+import { useRecoilState } from "recoil";
+
 const { ROUTE_PATHS } = config;
 
 const PAGES_OPTIONS = { plansPage: "برنامه های درسی" };
@@ -26,6 +30,7 @@ const pages = Object.values(PAGES_OPTIONS);
 const settings = Object.values(SETTINGS_OPTIONS);
 
 function MainAppbar() {
+  const [darkMode, setDarkModeState] = useRecoilState(darkModeState);
   const [anchorElNav, setAnchorElNav] = React.useState(null);
   const [anchorElUser, setAnchorElUser] = React.useState(null);
   const userActions = useUserActions();
@@ -139,8 +144,17 @@ function MainAppbar() {
               </Button>
             ))}
           </Box>
-
           <Box sx={{ flexGrow: 0 }}>
+            <MaterialUISwitch
+              checked={darkMode}
+              onChange={() => {
+                setDarkModeState(!darkMode);
+              }}
+              inputProps={{ "aria-label": "controlled" }}
+            />
+          </Box>
+
+          <Box sx={{ flexGrow: 0 }} ml={2}>
             <Tooltip title="تنظیمات کاربری">
               <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
                 <Avatar alt="Profile" />
