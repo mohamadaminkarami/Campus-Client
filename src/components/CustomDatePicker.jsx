@@ -31,7 +31,7 @@ function CustomDatePicker({ notSetDefaultValue, ...props }) {
       const today = new Date();
       fieldHelpers.setValue(today, true);
     }
-  }, [fieldHelpers]);
+  }, []);
   return (
     <>
       <DatePicker

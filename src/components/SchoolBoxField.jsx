@@ -27,7 +27,7 @@ function SchoolBoxField({ notSetDefaultValue, ...props }) {
 
   useEffect(() => {
     if (!notSetDefaultValue) {
-      fieldHelpers.setValue(schoolsList[1] || "", true);
+      fieldHelpers.setValue(schoolsList[0] || "", true);
     }
   }, [schoolsList]);
 

@@ -47,6 +47,8 @@ const loginFormSchema = Yup.object().shape({
     .required("ایمیل نمی‌تواند خالی باشد."),
   studentNumber: Yup.string()
     .matches("^[0-9]*$", "شماره دانش‌جویی تنها شامل عدد است.")
+    .min(8, "حداقل طول شماره دانش‌جویی ۸ رقم است.")
+    .max(9, "حداکثر طول شماره دانش‌جویی ۹ رقم است")
     .required("شماره دانش‌جویی نمی‌تواند خالی باشد."),
   password: Yup.string().required("رمز عبور نمی‌تواند خالی باشد."),
 });
