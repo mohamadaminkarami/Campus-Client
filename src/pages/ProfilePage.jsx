@@ -12,7 +12,7 @@ function ProfilePage() {
   const [alertState, setAlertState] = useRecoilState(profilePageAlertState);
 
   useEffect(async () => {
-    const result = await userActions.getProfileInfo();
+    const result = (await userActions.getProfileInfo()).data;
     const { data: schoolList, ...schoolLisstResponse } =
       await userActions.getSchoolsList();
 
