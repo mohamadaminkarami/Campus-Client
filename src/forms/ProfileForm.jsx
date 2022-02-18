@@ -59,7 +59,7 @@ function ProfileForm() {
   const handleSubmit = useCallback(
     async ({ school, entranceYear, email, studentNumber, takeCoursesTime }) => {
       entranceYear = entranceYear.getFullYear();
-      takeCoursesTime = getTimeStampFromDate(takeCoursesTime);
+      takeCoursesTime = parseInt(takeCoursesTime / 1000, 10);
       console.log({
         school,
         entranceYear,
