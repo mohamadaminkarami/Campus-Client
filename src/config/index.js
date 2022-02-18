@@ -8,19 +8,24 @@ const config = {
     PLANS: "/plans",
   },
   SERVER_API_URLS: {
-    BASE_URL: getEnvVariable("SERVER_BASE_URL", "http://localhost:8080"),
-    LOGIN_PATH: getEnvVariable("SERVER_LOGIN_PATH", "/auth/login"),
-    SIGNUP_PATH: getEnvVariable("SERVER_SIGNUP_PATH", "/auth/signup"),
-    PROFILE_PATH: getEnvVariable("SERVER_PROFILE_PATH", "/profile/"),
-    SCHOOLS_PATH: getEnvVariable("SERVER_SCHOOLS_PATH", "/schools/"),
+    BASE_URL: getEnvVariable(
+      "REACT_APP_SERVER_BASE_URL",
+      "http://localhost:8080"
+    ),
+    LOGIN_PATH: getEnvVariable("REACT_APP_SERVER_LOGIN_PATH", "/auth/login"),
+    SIGNUP_PATH: getEnvVariable("REACT_APP_SERVER_SIGNUP_PATH", "/auth/signup"),
+    PROFILE_PATH: getEnvVariable("REACT_APP_SERVER_PROFILE_PATH", "/profile/"),
+    SCHOOLS_PATH: getEnvVariable("REACT_APP_SERVER_SCHOOLS_PATH", "/schools/"),
     GROUP_COURSES_PATH: getEnvVariable(
-      "SERVER_GROUP_COURSES_PATH",
+      "REACT_APP_SERVER_GROUP_COURSES_PATH",
       "/schools/course-groups"
     ),
-    PLANS_PATH: getEnvVariable("SERVER_PLANS_PATH", "/plans"),
+    PLANS_PATH: getEnvVariable("REACT_APP_SERVER_PLANS_PATH", "/plans"),
   },
-  LOCAL_STORAGE_AUTH_KEY: getEnvVariable("LOCAL_STORAGE_AUTH_KEY", "userAuth"),
-  UI_THEME: getEnvVariable("UI_THEME", "dark"),
+  LOCAL_STORAGE_AUTH_KEY: getEnvVariable(
+    "REACT_APP_LOCAL_STORAGE_AUTH_KEY",
+    "userAuth"
+  ),
 };
 
 export default new Proxy(config, {
