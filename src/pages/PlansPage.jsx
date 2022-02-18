@@ -7,12 +7,14 @@ import { useCallback, useEffect, useMemo } from "react";
 import SwipeableViews from "react-swipeable-views";
 import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
 import useUserActions from "../actions/useUserActions";
+import AlertComponent from "../components/AlertComponent";
 import CourseDetailCard from "../components/CourseDetailCard";
 import Plan from "../components/Plan";
 import PlanTab from "../components/PlanTab";
 import courseGroupsListState from "../states/courseGroupsListState";
 import isAddPlanState from "../states/isAddPlanState";
 import pageSelectionState from "../states/pageSelectionState";
+import PlansPageAlertState from "../states/plansPageAlertState";
 import userPlansState from "../states/userPlansState";
 
 function PlansPage() {
@@ -20,9 +22,18 @@ function PlansPage() {
 
   const [plans, setPlans] = useRecoilState(userPlansState);
 
+  const [alertState, setAlertState] = useRecoilState(PlansPageAlertState);
+  const handleOnCloseAlert = useCallback(() => {
+    setAlertState({ open: false, message: "", severity: "error" });
+  });
+
   useEffect(async () => {
-    const plans = await userActions.getPlans();
-    setPlans(plans);
+    const { data: plans, ...plansResponse } = await userActions.getPlans();
+    if (plansResponse?.error) {
+      setAlertState(plansResponse.alertState);
+    } else {
+      setPlans(plans);
+    }
   }, []);
 
   const [pageSelection, setPageSelection] = useRecoilState(pageSelectionState);
@@ -72,6 +83,7 @@ function PlansPage() {
         ...oldPageSelection,
         planTabIndex: newIndex,
         planId: plans[newIndex].id,
+        hoveredCourseGroup: undefined,
       }));
     },
     [plans, setPageSelection]
@@ -94,8 +106,12 @@ function PlansPage() {
 
   const handleAddPlan = useCallback(async () => {
     setIsAddPlan(true);
-    const plan = await userActions.createPlan();
-    setPlans((oldPlans) => [...oldPlans, plan]);
+    const { data: plan, ...planResponse } = await userActions.createPlan();
+    if (planResponse?.error) {
+      setAlertState(planResponse.alertState);
+    } else {
+      setPlans((oldPlans) => [...oldPlans, plan]);
+    }
   }, [userActions.createPlan, setPlans, plans]);
 
   const getCourseDetailCardProps = useCallback(() => {
@@ -268,6 +284,12 @@ function PlansPage() {
           </Grid>
         </Grid>
       </TabContext>
+      <AlertComponent
+        onClose={handleOnCloseAlert}
+        open={alertState.open}
+        message={alertState.message}
+        severity={alertState.severity}
+      />
     </>
   );
 }

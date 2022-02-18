@@ -44,8 +44,6 @@ function MainAppbar() {
         navigate(ROUTE_PATHS.PLANS);
         break;
       default:
-        console.log("unknown page option: ", page);
-        break;
     }
     setAnchorElNav(null);
   };
@@ -59,7 +57,6 @@ function MainAppbar() {
         userActions.logout();
         break;
       default:
-        console.log("unknown setting option: ", setting);
     }
     setAnchorElUser(null);
   };

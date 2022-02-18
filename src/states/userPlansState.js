@@ -5,7 +5,7 @@ const userPlansState = atom({
   key: "userPlansState",
   default: selector({
     key: "userPlansState/Default",
-    get: () => useUserActions().getPlans(),
+    get: async () => (await useUserActions().getPlans()).data,
   }),
 });
 

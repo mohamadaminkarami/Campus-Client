@@ -5,7 +5,7 @@ const schoolListState = selector({
   key: "schoolsListState",
   get: async () => {
     const userActions = useUserActions();
-    return userActions.getSchoolsList();
+    return (await userActions.getSchoolsList()).data;
   },
 });
 

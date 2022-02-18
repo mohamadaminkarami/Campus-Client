@@ -3,30 +3,35 @@ import { useRecoilState, useSetRecoilState } from "recoil";
 import useUserActions from "../actions/useUserActions";
 import AlertComponent from "../components/AlertComponent";
 import ProfileForm from "../forms/ProfileForm";
-import profilePageAlertState from "../states/profilePageAlertStage";
+import profilePageAlertState from "../states/profilePageAlertState";
 import userProfileState from "../states/userProfileState";
 
 function ProfilePage() {
   const setUserProfile = useSetRecoilState(userProfileState);
   const userActions = useUserActions();
-  useEffect(async () => {
-    const result = await userActions.getProfileInfo();
-    const schoolList = await userActions.getSchoolsList();
-
-    setUserProfile({
-      ...result,
-      takeCoursesTime: result.takeCoursesTime
-        ? result.takeCoursesTime * 1000
-        : Date.now(),
-      school: schoolList.find((s) => s.id === result.schoolId),
-      entranceYear: new Date(result.entranceYear, 6, 1),
-    });
-  }, []);
-
   const [alertState, setAlertState] = useRecoilState(profilePageAlertState);
 
+  useEffect(async () => {
+    const result = await userActions.getProfileInfo();
+    const { data: schoolList, ...schoolLisstResponse } =
+      await userActions.getSchoolsList();
+
+    if (schoolLisstResponse?.error) {
+      setAlertState(schoolLisstResponse.alertState);
+    } else {
+      setUserProfile({
+        ...result,
+        takeCoursesTime: result.takeCoursesTime
+          ? result.takeCoursesTime * 1000
+          : Date.now(),
+        school: schoolList.find((s) => s.id === result.schoolId),
+        entranceYear: new Date(result.entranceYear, 6, 1),
+      });
+    }
+  }, []);
+
   const handleOnCloseAlert = useCallback(() => {
-    setAlertState({ open: false, message: "", severity: "" });
+    setAlertState({ open: false, message: "", severity: "error" });
   });
   return (
     <>

@@ -14,26 +14,37 @@ import darkTheme from "./ui/themes/darkTheme";
 import "./index.css";
 import config from "./config";
 
+import CircularProgress from "@mui/material/CircularProgress";
+
 const { UI_THEME } = config;
 
 ReactDOM.render(
   <React.StrictMode>
     <RecoilRoot>
-      <React.Suspense fallback={<div>Loading...</div>}>
-        <BrowserRouter>
-          <LocalizationProvider dateAdapter={AdapterJalali}>
-            <RTL>
-              <ThemeProvider
-                theme={UI_THEME === "dark" ? darkTheme : lightTheme}
-              >
-                <CssBaseline>
+      <RTL>
+        <ThemeProvider theme={UI_THEME === "dark" ? darkTheme : lightTheme}>
+          <CssBaseline>
+            <React.Suspense
+              fallback={
+                <CircularProgress
+                  style={{
+                    left: "50%",
+                    top: "50%",
+                    position: "absolute",
+                    transform: "translate(-50%, -50%)",
+                  }}
+                />
+              }
+            >
+              <BrowserRouter>
+                <LocalizationProvider dateAdapter={AdapterJalali}>
                   <App />
-                </CssBaseline>
-              </ThemeProvider>
-            </RTL>
-          </LocalizationProvider>
-        </BrowserRouter>
-      </React.Suspense>
+                </LocalizationProvider>
+              </BrowserRouter>
+            </React.Suspense>
+          </CssBaseline>
+        </ThemeProvider>
+      </RTL>
     </RecoilRoot>
   </React.StrictMode>,
   document.getElementById("root")

@@ -3,6 +3,7 @@ import { makeStyles } from "@mui/styles";
 import { Form, Formik } from "formik";
 import { useCallback } from "react";
 import { useNavigate } from "react-router-dom";
+import { useSetRecoilState } from "recoil";
 import * as Yup from "yup";
 import useUserActions from "../actions/useUserActions";
 import CustomDatePicker from "../components/CustomDatePicker";
@@ -11,6 +12,7 @@ import PasswordField from "../components/PasswordField";
 import SchoolBoxField from "../components/SchoolBoxField";
 import StudentNumberField from "../components/StudentNumberField";
 import config from "../config";
+import loginPageAlertState from "../states/loginPageAlertState";
 
 const { ROUTE_PATHS } = config;
 
@@ -22,7 +24,7 @@ const initialValues = {
   password: "",
 };
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles(() => ({
   signupForm: {
     display: "flex",
     flexDirection: "column",
@@ -56,17 +58,23 @@ const signupFormSchema = Yup.object().shape({
 function SignupForm() {
   const classes = useStyles();
   const userActions = useUserActions();
+  const setLoginPageAlertState = useSetRecoilState(loginPageAlertState);
   const navigate = useNavigate();
   const handleSubmit = useCallback(
     async ({ school, entranceYear, email, studentNumber, password }) => {
-      await userActions.signup({
+      const response = await userActions.signup({
         email,
         studentNumber,
         password,
         schoolId: school.id,
         entranceYear: entranceYear.getFullYear(),
       });
-      navigate(ROUTE_PATHS.HOME, { replace: true });
+
+      if (response.error) {
+        setLoginPageAlertState(response.alertState);
+      } else {
+        navigate(ROUTE_PATHS.HOME, { replace: true });
+      }
     },
 
     [userActions, navigate]
