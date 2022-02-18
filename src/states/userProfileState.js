@@ -14,7 +14,7 @@ const userProfileState = selector({
         ? result.takeCoursesTime * 1000
         : Date.now(),
       school: schoolList.find((s) => s.id === result.schoolId),
-      entranceYear: new Date(result.entranceYear, 1, 1),
+      entranceYear: new Date(result.entranceYear, 6, 1),
     };
   },
 });
